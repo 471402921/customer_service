@@ -119,35 +119,50 @@ description: 维护「开平客服｜knowledge_base」飞书知识库 (CRUD) 与
 
 ## § BadCase 驱动的修复流程
 
-`badcases/YYYY-MM.md` 是按月归档的 BadCase 清单(详见 `badcases/README.md`)。**多人 append**,极简 4 行结构:
+BadCase 收集在飞书 Bitable(配置见 `state/wiki_mapping.json` 的 `badcase_bitable`):
 
-```markdown
-## YYYY-MM-DD <关键词> @报告人
-**问**:<用户原话>
-**答错**:<Agent 实际回答>
-**对的**:<期望答案>
-```
+- 客服同学通过 **form_url** 填表提交一条 BadCase(只填:用户提问 / 当前回答 / 期望回答 / 涉及主题 / 来源 / 附件)
+- 每条 BadCase 是 bitable 的一行 record;`处理状态` 字段控制流转(`待处理` → `处理中` → `已修复`)
 
-收到"看下这个月的 badcase"/"@badcases/xxx.md 处理一下"/"客服答错了"等指令时:
+收到"看下今天的 badcase"/"处理一下 badcase"/"客服答错了"等指令时:
 
-1. **读取目标月份文件**(默认当月,用 `date +%Y-%m`)
-2. **筛未处理的 case**:扫所有 `## YYYY-MM-DD ...` 段,**没有 `> ✅ 已修复` 行的就是未处理**
-3. **逐条诊断**:对照「**问**/**答错**/**对的**」三段,自行判断错误类型(信息缺失/过时/矛盾/杜撰/链接失效/术语误用/格式问题/答非所问)。无需要求用户填类型字段
-4. **定位文件**:Grep 「**问**」中的关键词在 `knowledge_base/` 找候选;若找不到合适文件,按「跨文件归属」表(SKILL.md 上文)选最合适的归属
-5. **执行修改**:Edit 本地 MD,严格遵守 RAG 规范(`references/rag-rules.md`)
-6. **push 到飞书**:`bash scripts/push.sh <file>` 单文件覆盖
-7. **回填处理记录**:在该 case 段末尾 append 一行:
+1. **读取 bitable 待处理 record**:
 
-   ```markdown
-   > ✅ 已修复 by kb-curator @ YYYY-MM-DD HH:MM — 改了「<文件名> → <段落>」,<wiki URL>
+   ```bash
+   lark-cli base +record-list \
+     --base-token <base_token> \
+     --table-id <table_id> \
+     --as user
    ```
 
-   wiki URL 从 `state/wiki_mapping.json` 取
-8. **告诉用户**:简述本轮处理了几条、改了哪些文件、给 wiki 链接验收
+   过滤 `处理状态` 为空或 `待处理` 的 record(已修复的跳过)
 
-**多个 case 指向同一文件**:合并成一次 Edit + 一次 push,但每条 case 都要单独回填处理记录(指向同一次 push 即可)。
+2. **逐条诊断**:对照「用户提问 / 当前回答 / 期望回答 / 涉及主题」字段,自行判断错误类型(信息缺失/过时/矛盾/杜撰/链接失效/术语误用/格式问题/答非所问)。`涉及主题` 字段是用户自报的归类提示,可作为定位文件的起点
 
-**已处理过的 case**(有 `> ✅` 行的)**直接跳过**,不要重复处理。
+3. **定位文件**:Grep 「用户提问」中的关键词在 `knowledge_base/` 找候选;若找不到合适文件,按「跨文件归属」表(SKILL.md 上文)选最合适的归属
+
+4. **执行修改**:Edit 本地 MD,严格遵守 RAG 规范(`references/rag-rules.md`)
+
+5. **push 到飞书**:`bash scripts/push.sh <file>` 单文件覆盖
+
+6. **回填 bitable record**:把 `处理状态` 改为 `已修复`,`处理记录(系统填)` 写入「改了哪些文件 → 段落」简述,`修复链接(系统填)` 写入对应 wiki URL:
+
+   ```bash
+   lark-cli base +record-upsert \
+     --base-token <base_token> \
+     --table-id <table_id> \
+     --record-id <record_id> \
+     --json '{"fields":{"处理状态":"已修复","处理记录(系统填)":"改了 xxx.md 的 yy 段","修复链接(系统填)":{"link":"https://www.feishu.cn/wiki/...","text":"打开飞书查看"}}}' \
+     --as user
+   ```
+
+7. **告诉用户**:简述本轮处理了几条、改了哪些文件、给 wiki 链接验收;附 bitable 链接让用户去看处理状态变化
+
+**多个 record 指向同一文件**:合并成一次 Edit + 一次 push,但每条 record 都要单独 upsert 处理记录(都指向同一个修复链接即可)
+
+**已处理过的 record**(处理状态=已修复)**直接跳过**
+
+**没有任何待处理 record 时**:直接告诉用户"目前 bitable 里没有待处理 BadCase",不要硬找事做
 
 ## 子文件指引
 

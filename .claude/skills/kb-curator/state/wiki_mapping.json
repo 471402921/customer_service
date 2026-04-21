@@ -3,6 +3,25 @@
   "wiki_space": "7612502644069780687",
   "wiki_parent_url": "https://vrfi1sk8a0.feishu.cn/wiki/YylYwP4AWicKt8kdqdCcv2Tanaf",
   "wiki_parent_title": "开平客服｜knowledge_base",
+  "badcase_bitable": {
+    "base_token": "BmoNbOgJkaxEyGsfyskc4H4cnFd",
+    "table_id": "tbl3Q2XmQESifHKS",
+    "form_id": "vewtIQAkpH",
+    "base_url": "https://vrfi1sk8a0.feishu.cn/base/BmoNbOgJkaxEyGsfyskc4H4cnFd",
+    "form_url": "https://vrfi1sk8a0.feishu.cn/base/BmoNbOgJkaxEyGsfyskc4H4cnFd?table=tbl3Q2XmQESifHKS&view=vewtIQAkpH",
+    "wiki_url": null,
+    "fields": {
+      "用户提问": "fldYjY7JRT",
+      "当前回答(错的)": "fldFo3cEQH",
+      "期望回答(对的)": "fldwI89XVW",
+      "涉及主题": "fldnG0tx3x",
+      "来源": "fldXkOiPB9",
+      "附件(可选,如截图)": "fldbHfN2ut",
+      "处理状态": "fld37ugFss",
+      "处理记录(系统填)": "fldAPCAA10",
+      "修复链接(系统填)": "fldLeLSs8D"
+    }
+  },
   "files": {
     "开平客服需知信息.md": {
       "doc_id": "SMOAd1D0bonQo9xzPxncBaMEngy",
