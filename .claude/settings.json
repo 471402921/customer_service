@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:xcna5r3m2c16.feishu.cn)",
+      "WebFetch(domain:www.7moor.com)",
+      "mcp__MiniMax__web_search",
+      "WebFetch(domain:github.com)",
+      "Bash(npm --version)",
+      "Bash(npm install:*)",
+      "Bash(npx skills:*)",
+      "Bash(lark-cli config:*)",
+      "Bash(curl -s \"https://api.github.com/repos/MiniMax-AI/MiniMax-MCP/contents/\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/MiniMax-AI/MiniMax-MCP/main/minimax_mcp/tools/image.py\")",
+      "Bash(curl -s \"https://api.github.com/repos/MiniMax-AI/MiniMax-MCP/contents/minimax_mcp\")",
+      "Bash(python3 -c \"import sys, json; data=json.load\\(sys.stdin\\); [print\\(d[''''name'''']\\) for d in data]\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/MiniMax-AI/MiniMax-MCP/main/minimax_mcp/server.py\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/MiniMax-AI/MiniMax-MCP-JS/main/src/tools/t2i.ts\")"
+    ]
+  }
+}
