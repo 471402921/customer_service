@@ -71,3 +71,7 @@ When editing knowledge-base files, keep these distinctions intact — they are t
 ## Vendor procurement context
 
 Memory tracks ongoing vendor evaluation (容联七陌 trial leaning toward recommend; 网易七鱼 awaiting quote). Vendor reference manuals are in [客服系统资料/](客服系统资料/) (large PDFs/DOCX — read with the `pdf` / `docx` skills, not raw `Read`).
+
+## 容联 X-Bot 配置
+
+留资收集流程的 Baserow 数据库连接信息（host / table ID / API token / 字段映射）见 [CLAUDE.local.md](CLAUDE.local.md)（本地文件，已在 .gitignore，不入库）。
